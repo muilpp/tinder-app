@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/add_new_user"
+            android:title="@string/menu_new_user"
+            android:icon="@drawable/ic_perm_identity_black_48dp"/>
+
+        <item
+            android:id="@+id/recommendations"
+            android:title="@string/menu_recs"
+            android:icon="@drawable/ic_supervisor_account_black_48dp"/>
+
+        <item
+            android:id="@+id/matches"
+            android:title="@string/menu_matches"
+            android:icon="@drawable/ic_chat_black_48dp"/>
+
+        <item
+            android:id="@+id/change_location"
+            android:title="@string/change_location"
+            android:icon="@drawable/ic_add_location_black_48dp"/>
+
+        <item
+            android:id="@+id/exit"
+            android:title="@string/menu_exit"
+            android:icon="@drawable/ic_exit_to_app_black_48dp"/>
+    </group>
+</menu>

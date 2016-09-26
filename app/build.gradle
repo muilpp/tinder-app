@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.tinderapp"
+        minSdkVersion 17
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+
+        // Enabling multidex support.
+        multiDexEnabled true
+    }
+
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "BASE_URL", "\"https://api.gotinder.com/\""
+            buildConfigField "String", "USER_NAME", "\"USER_NAME\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "BIRTH_DATE", "\"BIRTH_DATE\""
+            buildConfigField "String", "DISTANCE", "\"DISTANCE\""
+            buildConfigField "String", "IGRAM", "\"IGRAM\""
+            buildConfigField "String", "JOB", "\"JOB\""
+            buildConfigField "String", "SCHOOL", "\"SCHOOL\""
+            buildConfigField "String", "BIO", "\"BIO\""
+            buildConfigField "String", "USER_TOKEN", "\"USER_TOKEN\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "IMAGES_ARRAY", "\"IMAGES_ARRAY\""
+            buildConfigField "String", "LAST_CONNECTION", "\"LAST_CONNECTION\""
+            buildConfigField "String", "IGRAM_PACKAGE", "\"com.instagram.android\""
+            buildConfigField "String", "IGRAM_BASE_URL", "\"http://instagram.com/\""
+            buildConfigField "String", "MESSAGE_LIST", "\"MESSAGE_LIST\""
+            buildConfigField "String", "USER_IMAGE", "\"USER_IMAGE\""
+            buildConfigField "String", "MATCH_ID", "\"MATCH_ID\""
+            buildConfigField "String", "HIDE_LIKE_ICONS", "\"HIDE_LIKE_ICONS\""
+            buildConfigField "String", "MARC_TOKEN", ""
+            buildConfigField "String", "JOAN_TOKEN", ""
+            buildConfigField "String", "LAT", "\"LAT\""
+            buildConfigField "String", "LON", "\"LON\""
+            buildConfigField "Integer", "REQUEST_CODE_CHANGE_LOCATION", "1"
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", "\"https://api.gotinder.com/\""
+            buildConfigField "String", "USER_NAME", "\"USER_NAME\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "BIRTH_DATE", "\"BIRTH_DATE\""
+            buildConfigField "String", "DISTANCE", "\"DISTANCE\""
+            buildConfigField "String", "IGRAM", "\"IGRAM\""
+            buildConfigField "String", "JOB", "\"JOB\""
+            buildConfigField "String", "SCHOOL", "\"SCHOOL\""
+            buildConfigField "String", "BIO", "\"BIO\""
+            buildConfigField "String", "USER_TOKEN", "\"USER_TOKEN\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "IMAGES_ARRAY", "\"IMAGES_ARRAY\""
+            buildConfigField "String", "LAST_CONNECTION", "\"LAST_CONNECTION\""
+            buildConfigField "String", "IGRAM_PACKAGE", "\"com.instagram.android\""
+            buildConfigField "String", "IGRAM_BASE_URL", "\"http://instagram.com/\""
+            buildConfigField "String", "MESSAGE_LIST", "\"MESSAGE_LIST\""
+            buildConfigField "String", "USER_IMAGE", "\"USER_IMAGE\""
+            buildConfigField "String", "MATCH_ID", "\"MATCH_ID\""
+            buildConfigField "String", "HIDE_LIKE_ICONS", "\"HIDE_LIKE_ICONS\""
+            buildConfigField "String", "MARC_TOKEN", ""
+            buildConfigField "String", "JOAN_TOKEN", ""
+            buildConfigField "String", "LAT", "\"LAT\""
+            buildConfigField "String", "LON", "\"LON\""
+            buildConfigField "Integer", "REQUEST_CODE_CHANGE_LOCATION", "1"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:cardview-v7:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'joda-time:joda-time:2.8.1'
+    compile 'com.github.bhargavms:DotLoader:1.0.0'
+    compile 'com.google.android.gms:play-services:9.4.0'
+    compile 'com.google.android.gms:play-services-location:9.4.0'
+}

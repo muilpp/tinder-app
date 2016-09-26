@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Tinder App</string>
+
+    <!--Home Activity-->
+    <string name="title_activity_home">Welcome!</string>
+    <string name="error_login">Not possible to login this time</string>
+    <string name="try_again">TRY AGAIN</string>
+    <string name="welcome">Welcome!</string>
+
+    <!--Image Activity-->
+    <string name="title_activity_image_gallery"></string>
+
+    <!--Recommendations Fragment-->
+    <string name="name">Name: </string>
+    <string name="birth_date">Birth date: </string>
+    <string name="distance">Distance (in miles): </string>
+    <string name="igram">Instagram user: </string>
+    <string name="job">Job: </string>
+    <string name="school">School: </string>
+    <string name="lastConn">Last connection: </string>
+    <string name="bio">Bio: </string>
+    <string name="error_get_recs">Not possible to get the recommendations this time</string>
+
+    <!--Matches Fragment-->
+    <string name="error_get_matches">Not possible to get the matches this time</string>
+
+    <!--Chat Activity-->
+    <string name="empty_message">Message is empty, type something first!</string>
+
+    <!--Drawer Menu-->
+    <string name="menu_new_user">Change user</string>
+    <string name="menu_recs">Recommendations</string>
+    <string name="menu_matches">Matches</string>
+    <string name="change_location">Change location</string>
+    <string name="menu_exit">Exit</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="hint_message">Say something</string>
+    <string name="title_activity_location">Map</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="change_location_dialog_title">Change location</string>
+    <string name="change_location_dialog_message">Are you sure you want edit your location?</string>
+    <string name="error_location_change">Not possible to change the location this time</string>
+</resources>
