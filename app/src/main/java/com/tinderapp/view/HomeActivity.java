@@ -43,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     private NavigationView mNavigationView;
     private final static String TAG = HomeActivity.class.getName();
     private DotLoader mDotLoader;
+    private RelativeLayout menuLayout;
 //    private TextView mContentTv;
 
     @Override
@@ -51,7 +52,60 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        initViews();
         initNavigationDrawer();
+    }
+
+    public void initViews() {
+        final FragmentManager fragmentManager = getFragmentManager();
+        final Bundle args = new Bundle();
+
+        RelativeLayout changeUserLayout = (RelativeLayout)findViewById(R.id.add_person_layout);
+        changeUserLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideMenu();
+                UsersFragment usersFragment = new UsersFragment();
+                fragmentManager.beginTransaction().replace(R.id.main_content, usersFragment).commit();
+            }
+        });
+
+        RelativeLayout recsLayout = (RelativeLayout)findViewById(R.id.recs_layout);
+        recsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideMenu();
+                args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                RecsFragment recsFragment = new RecsFragment();
+                recsFragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.main_content, recsFragment).commit();
+            }
+        });
+
+        RelativeLayout matchesLayout = (RelativeLayout)findViewById(R.id.matches_layout);
+        matchesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideMenu();
+                args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                MatchesFragment matchesFragment = new MatchesFragment();
+                matchesFragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.main_content, matchesFragment).commit();
+            }
+        });
+
+        RelativeLayout changeLocationLayout = (RelativeLayout)findViewById(R.id.change_location_layout);
+        changeLocationLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideMenu();
+                mDrawerLayout.closeDrawers();
+                Intent mapsIntent = new Intent(HomeActivity.this, MapsActivity.class);
+                mapsIntent.putExtra(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                startActivityForResult(mapsIntent, BuildConfig.REQUEST_CODE_CHANGE_LOCATION);
+//                startActivity(mapsIntent);
+            }
+        });
     }
 
     public void initNavigationDrawer() {
@@ -60,6 +114,7 @@ public class HomeActivity extends AppCompatActivity {
 //        mContentTv = (TextView) relativeLayout.findViewById(R.id.content_tv);
         mNavigationView = (NavigationView)findViewById(R.id.navigation_view);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer);
+        menuLayout = (RelativeLayout)findViewById(R.id.menu_layout);
 
         showLoader();
         getUserToken(BuildConfig.MARC_TOKEN);
@@ -74,7 +129,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 switch (id) {
                     case R.id.add_new_user:
-
                         UsersFragment usersFragment = new UsersFragment();
                         fragmentManager.beginTransaction().replace(R.id.main_content, usersFragment).commit();
                         mDrawerLayout.closeDrawers();
@@ -82,11 +136,9 @@ public class HomeActivity extends AppCompatActivity {
 
                     case R.id.recommendations:
                         args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
-//                        RecommendationsFragment recsFragment = new RecommendationsFragment();
                         RecsFragment recsFragment = new RecsFragment();
                         recsFragment.setArguments(args);
                         fragmentManager.beginTransaction().replace(R.id.main_content, recsFragment).commit();
-//                        mContentTv.setVisibility(View.GONE);
 
                         mDrawerLayout.closeDrawers();
                         break;
@@ -96,17 +148,16 @@ public class HomeActivity extends AppCompatActivity {
                         MatchesFragment matchesFragment = new MatchesFragment();
                         matchesFragment.setArguments(args);
                         fragmentManager.beginTransaction().replace(R.id.main_content, matchesFragment).commit();
-//                        mContentTv.setVisibility(View.GONE);
-
                         mDrawerLayout.closeDrawers();
                         break;
 
                     case R.id.change_location:
                         mDrawerLayout.closeDrawers();
-                        Intent mapsIntent = new Intent(HomeActivity.this, MapsActivity.class);
-//                        startActivityForResult(mapsIntent, BuildConfig.REQUEST_CODE_CHANGE_LOCATION);
-                        startActivity(mapsIntent);
 
+                        Intent mapsIntent = new Intent(HomeActivity.this, MapsActivity.class);
+                        mapsIntent.putExtra(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                        startActivityForResult(mapsIntent, BuildConfig.REQUEST_CODE_CHANGE_LOCATION);
+//                        startActivity(mapsIntent);
                         break;
 
                     case R.id.exit:
@@ -133,55 +184,59 @@ public class HomeActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == BuildConfig.REQUEST_CODE_CHANGE_LOCATION) {
-//            double latitude = data.getDoubleExtra(BuildConfig.LAT, 0);
-//            double longitude = data.getDoubleExtra(BuildConfig.LON, 0);
-//            Log.i(TAG, "Arriba lat -> " + latitude);
-//            Log.i(TAG, "Arriba lon -> " + longitude);
-//
-//            LocationDTO location = new LocationDTO(latitude, longitude);
-//            TinderAPI tinderAPI = TinderRetrofit.getTokenInstanceWithContentType(mTinderUser.getToken());
-//
-//            Call<ResponseBody> call = tinderAPI.changeLocation(location);
-//            call.enqueue(new Callback<ResponseBody>() {
-//                @Override
-//                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                    try {
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            String responseStr = response.body().string();
-//
-//                            Log.i(TAG, "Reponse -> " + responseStr);
-//
-//                            if (responseStr.contains("error"))
-//                                Toast.makeText(HomeActivity.this, "Wait a little longer to perform another location change", Toast.LENGTH_LONG).show();
-//                            else
-//                                Toast.makeText(HomeActivity.this, "Location changed successfully, go look for new matches here!", Toast.LENGTH_LONG).show();
-//                        } else {
-//                            showLoginErrorSnackbar(getString(R.string.error_location_change));
-//                            Log.i(TAG, response.errorBody().string());
-//                        }
-//
-//                        hideLoader();
-//                    } catch (IOException e) {
-//                        Log.e(TAG, e.getMessage(), e);
-//                        showLoginErrorSnackbar(getString(R.string.error_location_change));
-//                        hideLoader();
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                    Log.e(TAG, t.getMessage(), t);
-//                    showLoginErrorSnackbar(getString(R.string.error_location_change));
-//                    hideLoader();
-//                }
-//            });
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == BuildConfig.REQUEST_CODE_CHANGE_LOCATION) {
+            showMenu();
+
+            if (data != null) {
+                double latitude = data.getDoubleExtra(BuildConfig.LAT, 0);
+                double longitude = data.getDoubleExtra(BuildConfig.LON, 0);
+                Log.i(TAG, "Arriba lat -> " + latitude);
+                Log.i(TAG, "Arriba lon -> " + longitude);
+
+                LocationDTO location = new LocationDTO(latitude, longitude);
+                TinderAPI tinderAPI = TinderRetrofit.getTokenInstanceWithContentType(mTinderUser.getToken());
+
+                Call<ResponseBody> call = tinderAPI.changeLocation(location);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            if (response.isSuccessful() && response.body() != null) {
+                                String responseStr = response.body().string();
+
+                                Log.i(TAG, "Reponse -> " + responseStr);
+
+                                if (responseStr.contains("error"))
+                                    Toast.makeText(HomeActivity.this, "Wait a little longer to perform another location change", Toast.LENGTH_LONG).show();
+                                else
+                                    Toast.makeText(HomeActivity.this, "Location changed successfully, go look for new matches here!", Toast.LENGTH_LONG).show();
+                            } else {
+                                showLoginErrorSnackbar(getString(R.string.error_location_change));
+                                Log.i(TAG, response.errorBody().string());
+                            }
+
+                            hideLoader();
+                        } catch (IOException e) {
+                            Log.e(TAG, e.getMessage(), e);
+                            showLoginErrorSnackbar(getString(R.string.error_location_change));
+                            hideLoader();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e(TAG, t.getMessage(), t);
+                        showLoginErrorSnackbar(getString(R.string.error_location_change));
+                        hideLoader();
+                    }
+                });
+            }
+        }
+    }
 
     private void getUserToken(String token) {
         TinderAPI tinderAPI = TinderRetrofit.getRawInstance();
@@ -204,6 +259,16 @@ public class HomeActivity extends AppCompatActivity {
 
                         TextView userNameTv = (TextView)header.findViewById(R.id.tv_user_name);
                         userNameTv.setText(mTinderUser.getUser().getName());
+
+                        NavigationView userProfileView = (NavigationView) findViewById(R.id.navigation_view);
+                        userProfileView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.main_content)).commit();
+                            }
+                        });
+
+                        showMenu();
                     } else {
                         showLoginErrorSnackbar(getString(R.string.error_login));
                         Log.i(TAG, response.errorBody().string());
@@ -242,13 +307,19 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showLoader() {
         mDotLoader.setVisibility(View.VISIBLE);
-//        mContentTv.setVisibility(View.GONE);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     private void hideLoader() {
         mDotLoader.setVisibility(View.GONE);
-//        mContentTv.setVisibility(View.VISIBLE);
+    }
+
+    private void showMenu() {
+        menuLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideMenu() {
+        menuLayout.setVisibility(View.GONE);
     }
 
     private void unlockDrawer() {

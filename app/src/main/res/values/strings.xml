@@ -41,4 +41,5 @@
     <string name="change_location_dialog_title">Change location</string>
     <string name="change_location_dialog_message">Are you sure you want edit your location?</string>
     <string name="error_location_change">Not possible to change the location this time</string>
+    <string name="change_location_error">Not posible to change the location this time, try again!</string>
 </resources>

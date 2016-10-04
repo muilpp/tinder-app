@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,13 +23,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.tinderapp.BuildConfig;
 import com.tinderapp.R;
+import com.tinderapp.model.TinderAPI;
+import com.tinderapp.model.TinderRetrofit;
+import com.tinderapp.model.api_data.LikeDTO;
+import com.tinderapp.model.api_data.LocationDTO;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -141,10 +152,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 mMarker.remove();
                                 updateMapLocation(gMap, latLng.latitude, latLng.longitude);
 
-                                Intent homeActivity = new Intent(MapsActivity.this, HomeActivity.class);
-                                homeActivity.putExtra(BuildConfig.LAT, latLng.latitude);
-                                homeActivity.putExtra(BuildConfig.LON, latLng.longitude);
-                                setResult(BuildConfig.REQUEST_CODE_CHANGE_LOCATION, homeActivity);
+                                Intent intent = new Intent();
+                                setResult(BuildConfig.REQUEST_CODE_CHANGE_LOCATION, intent);
+                                intent.putExtra(BuildConfig.LAT, latLng.latitude);
+                                intent.putExtra(BuildConfig.LON, latLng.longitude);
                                 finish();
                             }
                         })

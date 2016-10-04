@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".view.HomeActivity"
-    tools:showIn="@layout/activity_home">
+    tools:context=".view.HomeActivity">
+    <!--tools:showIn="@layout/activity_home">-->
 
     <com.bhargavms.dotloader.DotLoader
         android:id="@+id/dot_loader"
@@ -20,4 +20,111 @@
         app:number_of_dots="3"
         />
 
+    <RelativeLayout
+        android:id="@+id/menu_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/add_person_layout"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp">
+
+            <TextView
+                android:id="@+id/add_person_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Change user"/>
+
+            <ImageView
+                android:id="@+id/add_person_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_person_tv"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_account_circle_black_48dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/recs_layout"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_toEndOf="@+id/add_person_layout">
+
+            <TextView
+                android:id="@+id/recs_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Recommendations"/>
+
+            <ImageView
+                android:id="@+id/recs_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recs_tv"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_supervisor_account_black_48dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/matches_layout"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_below="@+id/add_person_layout">
+
+            <TextView
+                android:id="@+id/matches_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Matches"/>
+
+            <ImageView
+                android:id="@+id/matches_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/matches_tv"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_supervisor_account_black_48dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/change_location_layout"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_toEndOf="@+id/matches_layout"
+            android:layout_below="@+id/add_person_layout">
+
+            <TextView
+                android:id="@+id/change_location_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Change location"/>
+
+            <ImageView
+                android:id="@+id/change_location_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/change_location_tv"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_add_location_black_48dp"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
 </RelativeLayout>
