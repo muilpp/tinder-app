@@ -61,7 +61,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public Location getLocation() {
         Location location = null;
         try {
-            Log.i(TAG, "Entro a getLocation");
             LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
             // getting GPS status
@@ -73,8 +72,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (!isGPSEnabled && !isNetworkEnabled) {
                 Log.i(TAG, "No network provider enabled");
             } else {
-                Log.i(TAG, "Al else");
-
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
@@ -84,8 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // to handle the case where the user grants the permission. See the documentation
                     // for ActivityCompat#requestPermissions for more details.
                 }
-
-                Log.i(TAG, "Dp de check permission");
 
                 double latitude = 0, longitude = 0;
                 if (isNetworkEnabled) {
@@ -112,9 +107,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 }
-
-                Log.i(TAG, "Latitude -> " + latitude);
-                Log.i(TAG, "Longitude -> " + longitude);
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);

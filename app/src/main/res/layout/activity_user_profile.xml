@@ -59,7 +59,8 @@
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/pass_image">
                     <ImageView
                         android:id="@+id/igram_profile_image"
                         android:layout_width="35dp"
@@ -86,7 +87,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="5dp"
-                    />
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/like_image"
@@ -94,7 +95,8 @@
                     android:layout_height="35dp"
                     android:src="@drawable/tick"
                     android:layout_toStartOf="@id/superlike_image"
-                    android:layout_marginEnd="15dp" />
+                    android:layout_marginEnd="15dp"
+                    android:visibility="visible" />
 
             </RelativeLayout>
 

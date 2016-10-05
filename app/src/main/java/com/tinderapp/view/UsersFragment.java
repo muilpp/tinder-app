@@ -88,6 +88,9 @@ public class UsersFragment extends Fragment {
 
                         TextView userNameTv = (TextView)header.findViewById(R.id.tv_user_name);
                         userNameTv.setText(mTinderUser.getUser().getName());
+
+                        //Update the token in the home activity to make sure the proper user is used
+                        ((HomeActivity)getActivity()).getTinderUser().setToken(mTinderUser.getToken());
                     } else {
                         Log.i(TAG, response.errorBody().string());
                     }

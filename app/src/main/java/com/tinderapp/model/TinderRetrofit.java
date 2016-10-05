@@ -13,6 +13,7 @@ public class TinderRetrofit {
     private final static String TAG = TinderRetrofit.class.getName();
     public static TinderAPI tinderTokenAPI;
     public static TinderAPI tinderRawAPI;
+    public static String userToken;
 
     public static TinderAPI getRawInstance() {
         if (tinderRawAPI == null) {
@@ -46,8 +47,8 @@ public class TinderRetrofit {
     }
 
     //Get recommendations wouldn't work with content type
-    public static TinderAPI getTokenInstance(final String userToken) {
-        Log.i(TAG, "Arriba token -> " + userToken);
+    public static TinderAPI getTokenInstance(String token) {
+        userToken = token;
         if (tinderTokenAPI == null) {
             OkHttpClient okClientLoggerInterceptor = new OkHttpClient.Builder()
                     .addInterceptor(
@@ -61,6 +62,7 @@ public class TinderRetrofit {
                                             .build();
 
                                     Log.i(TAG, "Url -> " + request.url());
+                                    Log.i(TAG, "Token -> " + userToken);
                                     return chain.proceed(request);
                                 }
                             })
@@ -79,8 +81,8 @@ public class TinderRetrofit {
     }
 
     //Send message endpoint needs both token and content type
-    public static TinderAPI getTokenInstanceWithContentType(final String userToken) {
-        Log.i(TAG, "Arriba token -> " + userToken);
+    public static TinderAPI getTokenInstanceWithContentType(String token) {
+        userToken = token;
         if (tinderTokenAPI == null) {
             OkHttpClient okClientLoggerInterceptor = new OkHttpClient.Builder()
                     .addInterceptor(
@@ -95,6 +97,7 @@ public class TinderRetrofit {
                                             .build();
 
                                     Log.i(TAG, "Url -> " + request.url());
+                                    Log.i(TAG, "Token -> " + userToken);
                                     return chain.proceed(request);
                                 }
                             })

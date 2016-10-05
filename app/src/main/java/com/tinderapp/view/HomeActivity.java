@@ -56,6 +56,10 @@ public class HomeActivity extends AppCompatActivity {
         initNavigationDrawer();
     }
 
+    public TinderUser getTinderUser() {
+        return mTinderUser;
+    }
+
     public void initViews() {
         final FragmentManager fragmentManager = getFragmentManager();
         final Bundle args = new Bundle();
@@ -103,7 +107,6 @@ public class HomeActivity extends AppCompatActivity {
                 Intent mapsIntent = new Intent(HomeActivity.this, MapsActivity.class);
                 mapsIntent.putExtra(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                 startActivityForResult(mapsIntent, BuildConfig.REQUEST_CODE_CHANGE_LOCATION);
-//                startActivity(mapsIntent);
             }
         });
     }
@@ -117,7 +120,10 @@ public class HomeActivity extends AppCompatActivity {
         menuLayout = (RelativeLayout)findViewById(R.id.menu_layout);
 
         showLoader();
-        getUserToken(BuildConfig.MARC_TOKEN);
+
+        if (mTinderUser == null)
+            getUserToken(BuildConfig.MARC_TOKEN);
+        else getUserToken(mTinderUser.getToken());
 
         final Bundle args = new Bundle();
         final FragmentManager fragmentManager = getFragmentManager();
@@ -126,6 +132,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
+
+                hideMenu();
 
                 switch (id) {
                     case R.id.add_new_user:
@@ -194,8 +202,6 @@ public class HomeActivity extends AppCompatActivity {
             if (data != null) {
                 double latitude = data.getDoubleExtra(BuildConfig.LAT, 0);
                 double longitude = data.getDoubleExtra(BuildConfig.LON, 0);
-                Log.i(TAG, "Arriba lat -> " + latitude);
-                Log.i(TAG, "Arriba lon -> " + longitude);
 
                 LocationDTO location = new LocationDTO(latitude, longitude);
                 TinderAPI tinderAPI = TinderRetrofit.getTokenInstanceWithContentType(mTinderUser.getToken());
@@ -207,8 +213,6 @@ public class HomeActivity extends AppCompatActivity {
                         try {
                             if (response.isSuccessful() && response.body() != null) {
                                 String responseStr = response.body().string();
-
-                                Log.i(TAG, "Reponse -> " + responseStr);
 
                                 if (responseStr.contains("error"))
                                     Toast.makeText(HomeActivity.this, "Wait a little longer to perform another location change", Toast.LENGTH_LONG).show();
