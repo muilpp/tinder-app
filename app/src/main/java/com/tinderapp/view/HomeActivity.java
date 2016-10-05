@@ -215,14 +215,14 @@ public class HomeActivity extends AppCompatActivity {
                                 else
                                     Toast.makeText(HomeActivity.this, "Location changed successfully, go look for new matches here!", Toast.LENGTH_LONG).show();
                             } else {
-                                showLoginErrorSnackbar(getString(R.string.error_location_change));
+                                showLoginErrorSnackbar(getString(R.string.change_location_error));
                                 Log.i(TAG, response.errorBody().string());
                             }
 
                             hideLoader();
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage(), e);
-                            showLoginErrorSnackbar(getString(R.string.error_location_change));
+                            showLoginErrorSnackbar(getString(R.string.change_location_error));
                             hideLoader();
                         }
                     }
@@ -230,7 +230,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e(TAG, t.getMessage(), t);
-                        showLoginErrorSnackbar(getString(R.string.error_location_change));
+                        showLoginErrorSnackbar(getString(R.string.change_location_error));
                         hideLoader();
                     }
                 });
@@ -269,6 +269,19 @@ public class HomeActivity extends AppCompatActivity {
                         });
 
                         showMenu();
+
+                        if (getIntent().getBooleanExtra(BuildConfig.SHOW_MATCHES, false)) {
+                            //this happens after deleting a match, where we want to show the updated match list
+                            final FragmentManager fragmentManager = getFragmentManager();
+                            final Bundle args = new Bundle();
+
+                            args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                            MatchesFragment matchesFragment = new MatchesFragment();
+                            matchesFragment.setArguments(args);
+                            fragmentManager.beginTransaction().replace(R.id.main_content, matchesFragment).commit();
+
+                            hideMenu();
+                        }
                     } else {
                         showLoginErrorSnackbar(getString(R.string.error_login));
                         Log.i(TAG, response.errorBody().string());

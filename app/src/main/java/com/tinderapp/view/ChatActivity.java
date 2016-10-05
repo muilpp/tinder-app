@@ -125,6 +125,8 @@ public class ChatActivity extends AppCompatActivity {
                                 }
 
                                 intent.putStringArrayListExtra(BuildConfig.IMAGES_ARRAY, imageList);
+                                intent.putExtra(BuildConfig.MATCH_ID, getIntent().getStringExtra(BuildConfig.MATCH_ID));
+
                                 startActivity(intent);
                             }
                         });

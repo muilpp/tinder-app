@@ -46,6 +46,7 @@ android {
             buildConfigField "String", "JOAN_TOKEN", ""
             buildConfigField "String", "LAT", "\"LAT\""
             buildConfigField "String", "LON", "\"LON\""
+            buildConfigField "String", "SHOW_MATCHES", "\"SHOW_MATCHES\""
             buildConfigField "Integer", "REQUEST_CODE_CHANGE_LOCATION", "1"
         }
         release {
@@ -74,6 +75,7 @@ android {
             buildConfigField "String", "JOAN_TOKEN", ""
             buildConfigField "String", "LAT", "\"LAT\""
             buildConfigField "String", "LON", "\"LON\""
+            buildConfigField "String", "SHOW_MATCHES", "\"SHOW_MATCHES\""
             buildConfigField "Integer", "REQUEST_CODE_CHANGE_LOCATION", "1"
         }
     }

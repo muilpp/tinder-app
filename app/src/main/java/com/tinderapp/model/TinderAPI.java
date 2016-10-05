@@ -8,6 +8,7 @@ import com.tinderapp.view.MatchesFragment;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -40,4 +41,7 @@ public interface TinderAPI {
 
     @POST("/user/ping")
     Call<ResponseBody> changeLocation(@Body LocationDTO location);
+
+    @DELETE("/user/matches/"+"{matchID}")
+    Call<ResponseBody> deleteMatch(@Path("matchID") String matchID);
 }
