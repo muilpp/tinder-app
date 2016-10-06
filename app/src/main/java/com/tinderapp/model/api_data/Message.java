@@ -34,6 +34,13 @@ public class Message implements Parcelable{
         this.timestamp = timestamp;
     }
 
+    public Message(String to, String from, String message, long timestamp) {
+        this.to = to;
+        this.from = from;
+        this.message = message;
+        this.timestamp = timestamp;
+    }
+
     protected Message(Parcel in) {
         to = in.readString();
         from = in.readString();

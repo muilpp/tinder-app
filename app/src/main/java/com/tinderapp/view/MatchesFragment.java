@@ -58,6 +58,12 @@ public class MatchesFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUserMatches(mUserToken);
+    }
+
     private void initViews(View rootView) {
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.matches_recycler_view);
@@ -65,8 +71,6 @@ public class MatchesFragment extends Fragment {
         RelativeLayout parentActivityLayout = (RelativeLayout)getActivity().findViewById(R.id.main_content);
         mDotLoader = (DotLoader) parentActivityLayout.findViewById(R.id.dot_loader);
         showLoader();
-
-        getUserMatches(mUserToken);
 
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

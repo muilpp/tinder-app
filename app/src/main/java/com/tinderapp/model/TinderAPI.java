@@ -1,6 +1,7 @@
 package com.tinderapp.model;
 
 import com.tinderapp.model.api_data.FacebookTokenDTO;
+import com.tinderapp.model.api_data.LastActivityDTO;
 import com.tinderapp.model.api_data.LocationDTO;
 import com.tinderapp.view.ChatActivity;
 import com.tinderapp.view.MatchesFragment;
@@ -44,4 +45,7 @@ public interface TinderAPI {
 
     @DELETE("/user/matches/"+"{matchID}")
     Call<ResponseBody> deleteMatch(@Path("matchID") String matchID);
+
+    @POST("/updates")
+    Call<ResponseBody> getUpdates(@Body LastActivityDTO lastActivity);
 }

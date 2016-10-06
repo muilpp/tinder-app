@@ -9,6 +9,8 @@ public class MatchDTO {
     private List<Match> matchList;
     @SerializedName("blocks")
     private List<String> blocks;
+    @SerializedName("last_activity_date")
+    private String lastActivity;
 
     public List<Match> getMatchList() {
         return matchList;
@@ -24,5 +26,13 @@ public class MatchDTO {
 
     public void setBlocks(List<String> blocks) {
         this.blocks = blocks;
+    }
+
+    public String getLastActivity() {
+        return lastActivity;
+    }
+
+    public void setLastActivity(String lastActivity) {
+        this.lastActivity = lastActivity;
     }
 }

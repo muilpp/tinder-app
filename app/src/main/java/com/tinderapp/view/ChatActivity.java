@@ -1,6 +1,7 @@
 package com.tinderapp.view;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,11 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.tinderapp.BuildConfig;
 import com.tinderapp.R;
+import com.tinderapp.model.BaseApplication;
 import com.tinderapp.model.TinderAPI;
 import com.tinderapp.model.TinderRetrofit;
+import com.tinderapp.model.api_data.LastActivityDTO;
+import com.tinderapp.model.api_data.Match;
+import com.tinderapp.model.api_data.MatchDTO;
 import com.tinderapp.model.api_data.Message;
 import com.tinderapp.model.api_data.Photo;
 import com.tinderapp.model.api_data.UserProfileDTO;
@@ -44,15 +50,90 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Message> mMessageList;
     private ImageView mUserImage;
     private ChatRecyclerAdapter mAdapter;
-    private String mUserToken, mMatchID, mUserID;
+    private String mUserToken, mMatchID, mUserID, mLastActivityDate;
     private TinderAPI tinderAPI;
+
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        handler = new Handler();
+//        handler.postDelayed(timerThread, 2000);
+
         initViews();
+
+        //Add 10 minutes to offset the difference with the server
+        mLastActivityDate = DateTime.now().plusMinutes(10).toString();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BaseApplication.getEventBus().register(this);
+        handler.postDelayed(timerThread, 2000);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BaseApplication.getEventBus().unregister(this);
+        handler.removeCallbacks(timerThread);
+    }
+
+    private Runnable timerThread = new Runnable() {
+        @Override
+        public void run() {
+            LastActivityDTO lastActivityDTO = new LastActivityDTO();
+            lastActivityDTO.setLastActivityDate(mLastActivityDate);
+            Call<ResponseBody> call = tinderAPI.getUpdates(lastActivityDTO);
+
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        String responseStr = response.body().string();
+                        MatchDTO matches = new Gson().fromJson(responseStr, MatchDTO.class);
+
+                        if (matches.getMatchList() != null) {
+
+                            for (Match match : matches.getMatchList()) {
+                                //Fetch only the messages of the current user
+                                if (match.getId().contains(mUserID)) {
+                                    for (Message message : match.getMessageList()) {
+                                        //Message is received after last check, so we add it to the list
+                                        if (new DateTime(message.getTimestamp()).isAfter(new DateTime(mLastActivityDate))) {
+                                            BaseApplication.getEventBus().post(new Message(message.getTo(), message.getFrom(), message.getMessage(), DateTime.now().getMillis()));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        mLastActivityDate = matches.getLastActivity();
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, t.getMessage(), t);
+                }
+            });
+
+            handler.postDelayed(this, 3000);
+        }
+    };
+
+    @Subscribe
+    public void onMessageReceived(Message message) {
+        mMessageList.add(message);
+        mAdapter.notifyItemInserted(mMessageList.size()-1);
     }
 
     public void initViews() {
