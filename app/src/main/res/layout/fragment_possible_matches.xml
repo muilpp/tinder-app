@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.tinderapp.view.PossibleMatchesFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/matches_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/possible_matches_recycler_view"
+        android:scrollbars="vertical"
         />
 
 </android.support.v4.widget.SwipeRefreshLayout>

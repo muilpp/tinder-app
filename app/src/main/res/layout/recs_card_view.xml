@@ -44,8 +44,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/user_distance"
                 />
-                <!--android:layout_alignParentStart="true"-->
-                <!--android:layout_alignParentTop="true"-->
 
 
         </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.tinderapp.view;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -44,14 +45,13 @@ public class HomeActivity extends AppCompatActivity {
     private final static String TAG = HomeActivity.class.getName();
     private DotLoader mDotLoader;
     private RelativeLayout menuLayout;
-//    private TextView mContentTv;
+    private final FragmentManager mFragmentManager = getFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+
         initViews();
         initNavigationDrawer();
     }
@@ -64,13 +64,16 @@ public class HomeActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = getFragmentManager();
         final Bundle args = new Bundle();
 
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         RelativeLayout changeUserLayout = (RelativeLayout)findViewById(R.id.add_person_layout);
         changeUserLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 hideMenu();
                 UsersFragment usersFragment = new UsersFragment();
-                fragmentManager.beginTransaction().replace(R.id.main_content, usersFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.main_content, usersFragment, getString(R.string.menu_new_user)).commit();
             }
         });
 
@@ -82,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
                 args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                 RecsFragment recsFragment = new RecsFragment();
                 recsFragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.main_content, recsFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.main_content, recsFragment, getString(R.string.menu_recs)).commit();
             }
         });
 
@@ -94,7 +97,7 @@ public class HomeActivity extends AppCompatActivity {
                 args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                 MatchesFragment matchesFragment = new MatchesFragment();
                 matchesFragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.main_content, matchesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.main_content, matchesFragment, getString(R.string.menu_matches)).commit();
             }
         });
 
@@ -107,6 +110,18 @@ public class HomeActivity extends AppCompatActivity {
                 Intent mapsIntent = new Intent(HomeActivity.this, MapsActivity.class);
                 mapsIntent.putExtra(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                 startActivityForResult(mapsIntent, BuildConfig.REQUEST_CODE_CHANGE_LOCATION);
+            }
+        });
+
+        RelativeLayout possibleMatchesLayout = (RelativeLayout)findViewById(R.id.possible_matches_layout);
+        possibleMatchesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideMenu();
+                args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                PossibleMatchesFragment possibleMatchesFragment = new PossibleMatchesFragment();
+                possibleMatchesFragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.main_content, possibleMatchesFragment, getString(R.string.menu_possible_matches)).commit();
             }
         });
     }
@@ -122,7 +137,7 @@ public class HomeActivity extends AppCompatActivity {
         showLoader();
 
         if (mTinderUser == null)
-            getUserToken(BuildConfig.MARC_TOKEN);
+            getUserToken(BuildConfig.DEFAULT_TOKEN);
         else getUserToken(mTinderUser.getToken());
 
         final Bundle args = new Bundle();
@@ -136,9 +151,14 @@ public class HomeActivity extends AppCompatActivity {
                 hideMenu();
 
                 switch (id) {
+                    case R.id.home:
+                        removeFragments();
+                        mDrawerLayout.closeDrawers();
+                        break;
+
                     case R.id.add_new_user:
                         UsersFragment usersFragment = new UsersFragment();
-                        fragmentManager.beginTransaction().replace(R.id.main_content, usersFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.main_content, usersFragment, getString(R.string.menu_new_user)).commit();
                         mDrawerLayout.closeDrawers();
                         break;
 
@@ -146,7 +166,7 @@ public class HomeActivity extends AppCompatActivity {
                         args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                         RecsFragment recsFragment = new RecsFragment();
                         recsFragment.setArguments(args);
-                        fragmentManager.beginTransaction().replace(R.id.main_content, recsFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.main_content, recsFragment, getString(R.string.menu_recs)).commit();
 
                         mDrawerLayout.closeDrawers();
                         break;
@@ -155,7 +175,17 @@ public class HomeActivity extends AppCompatActivity {
                         args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                         MatchesFragment matchesFragment = new MatchesFragment();
                         matchesFragment.setArguments(args);
-                        fragmentManager.beginTransaction().replace(R.id.main_content, matchesFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.main_content, matchesFragment, getString(R.string.menu_matches)).commit();
+
+                        mDrawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.possible_matches:
+                        args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                        PossibleMatchesFragment possibleMatchesFragment = new PossibleMatchesFragment();
+                        possibleMatchesFragment.setArguments(args);
+                        fragmentManager.beginTransaction().replace(R.id.main_content, possibleMatchesFragment, getString(R.string.menu_possible_matches)).commit();
+
                         mDrawerLayout.closeDrawers();
                         break;
 
@@ -165,7 +195,6 @@ public class HomeActivity extends AppCompatActivity {
                         Intent mapsIntent = new Intent(HomeActivity.this, MapsActivity.class);
                         mapsIntent.putExtra(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                         startActivityForResult(mapsIntent, BuildConfig.REQUEST_CODE_CHANGE_LOCATION);
-//                        startActivity(mapsIntent);
                         break;
 
                     case R.id.exit:
@@ -315,8 +344,8 @@ public class HomeActivity extends AppCompatActivity {
                     .setAction(getString(R.string.try_again), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            getUserToken(BuildConfig.MARC_TOKEN);
                             showLoader();
+                            getUserToken(BuildConfig.DEFAULT_TOKEN);
                         }
                     }).show();
         }
@@ -341,5 +370,25 @@ public class HomeActivity extends AppCompatActivity {
 
     private void unlockDrawer() {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public void removeFragments() {
+        Fragment newUserFragment = mFragmentManager.findFragmentByTag(getString(R.string.menu_new_user));
+        if(newUserFragment != null)
+            mFragmentManager.beginTransaction().remove(newUserFragment).commit();
+
+        Fragment recsFragment = mFragmentManager.findFragmentByTag(getString(R.string.menu_recs));
+        if(recsFragment != null)
+            mFragmentManager.beginTransaction().remove(recsFragment).commit();
+
+        Fragment matchesFragment = mFragmentManager.findFragmentByTag(getString(R.string.menu_matches));
+        if(matchesFragment != null)
+            mFragmentManager.beginTransaction().remove(matchesFragment).commit();
+
+        Fragment possibleMatchesFragment = mFragmentManager.findFragmentByTag(getString(R.string.menu_possible_matches));
+        if(possibleMatchesFragment != null)
+            mFragmentManager.beginTransaction().remove(possibleMatchesFragment).commit();
+
+        menuLayout.setVisibility(View.VISIBLE);
     }
 }

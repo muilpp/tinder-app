@@ -39,7 +39,6 @@
         <activity
             android:name=".view.ImageGalleryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_image_gallery"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" />
         <activity

@@ -31,7 +31,6 @@ import com.tinderapp.model.api_data.Message;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -86,6 +85,7 @@ public class MatchesFragment extends Fragment {
                 .setAction(getString(R.string.try_again), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        showLoader();
                         getUserMatches(mUserToken);
                     }
                 });

@@ -98,4 +98,20 @@ public class Result {
     public void setBadgesList(List<Badges> badgesList) {
         this.badgesList = badgesList;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Result result = (Result) o;
+
+        return id != null ? id.equals(result.id) : result.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

@@ -1,9 +1,7 @@
 package com.tinderapp.view;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,25 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bhargavms.dotloader.DotLoader;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.tinderapp.BuildConfig;
 import com.tinderapp.R;
 import com.tinderapp.model.TinderAPI;
 import com.tinderapp.model.TinderRetrofit;
-import com.tinderapp.model.api_data.Photo;
 import com.tinderapp.model.api_data.RecommendationsDTO;
 import com.tinderapp.model.api_data.Result;
-import com.tinderapp.model.api_data.UserProfileDTO;
 import com.tinderapp.presenter.RecsAdapter;
-
-import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,84 +32,88 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecsFragment extends Fragment {
+public class PossibleMatchesFragment extends Fragment {
+    private static final String TAG = PossibleMatchesFragment.class.getName();
+    private List<Result> resultList = new ArrayList<>();
     private String mUserToken;
-    private final static String TAG = RecsFragment.class.getName();
-    private RecyclerView mRecyclerView;
-    private TinderAPI tinderAPI;
-    private SwipeRefreshLayout mSwipeLayout;
     private Snackbar mSnackbarRecsError;
     private DotLoader mDotLoader;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeLayout;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_recs, container, false);
-        mUserToken = this.getArguments().getString(BuildConfig.USER_TOKEN);
+        View rootView = inflater.inflate(R.layout.fragment_possible_matches, container, false);
         initViews(rootView);
+        mUserToken = this.getArguments().getString(BuildConfig.USER_TOKEN);
+        getPossibleMatches();
 
         return rootView;
     }
 
-    public void initViews(View rootView) {
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv);
-
+    private void initViews(View rootView) {
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.possible_matches_recycler_view);
         GridLayoutManager mLayoutManager = new GridLayoutManager(rootView.getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        tinderAPI = TinderRetrofit.getTokenInstance(mUserToken);
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
-
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getUserRecommendations();
+                getPossibleMatches();
             }
         });
-        RelativeLayout parentActivityLayout = (RelativeLayout)getActivity().findViewById(R.id.main_content);
-        mDotLoader = (DotLoader) parentActivityLayout.findViewById(R.id.dot_loader);
-        showLoader();
 
-        mSnackbarRecsError = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), getString(R.string.error_get_recs), Snackbar.LENGTH_INDEFINITE)
+        mSnackbarRecsError = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), getString(R.string.error_get_possible_matches), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.try_again), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         showLoader();
-                        getUserRecommendations();
+                        getPossibleMatches();
                     }
                 });
 
-        getUserRecommendations();
+        RelativeLayout parentActivityLayout = (RelativeLayout)getActivity().findViewById(R.id.main_content);
+        mDotLoader = (DotLoader) parentActivityLayout.findViewById(R.id.dot_loader);
+        showLoader();
     }
 
-    private void getUserRecommendations() {
+    private void getPossibleMatches() {
+        TinderAPI tinderAPI = TinderRetrofit.getTokenInstance(mUserToken);
         Call<ResponseBody> call = tinderAPI.getRecommendations();
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        String responseStr = response.body().string();
-                        if (responseStr.contains("recs timeout") || responseStr.contains("recs exhausted") || responseStr.contains("error")) {
-                            Toast.makeText(getActivity(), "Something weird happened", Toast.LENGTH_LONG).show();
-                            getActivity().finish();
-                        } else {
-                            RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
-
-                            if (recs != null && recs.getResult() != null & recs.getResult().size() > 0) {
-                                RecsAdapter recsAdapter = new RecsAdapter(recs.getResult(), getActivity(), mUserToken);
-                                mRecyclerView.setAdapter(recsAdapter);
-                            } else Toast.makeText(getActivity(), "No recommendations this time", Toast.LENGTH_LONG).show();
-                        }
+                    String responseStr = response.body().string();
+                    if (responseStr.contains("recs timeout") || responseStr.contains("recs exhausted") || responseStr.contains("error")) {
+                        Toast.makeText(getActivity(), "Something weird happened", Toast.LENGTH_LONG).show();
+                        getActivity().finish();
                     } else {
-                        mSnackbarRecsError.show();
-                        Log.i(TAG, response.errorBody().string());
+                        RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
+
+                        //first time
+                        if (recs.getResult().size() > 0 && resultList.isEmpty()) {
+                            resultList = recs.getResult();
+                            getPossibleMatches();
+                        } else {
+                            // second time, check whether there are repeated elements
+                            resultList.retainAll(recs.getResult());
+
+                            if(resultList.isEmpty()) {
+                                Log.i(TAG, "No possible matches this time, try again later");
+                                Toast.makeText(getActivity(), "No possible matches this time, try again later", Toast.LENGTH_LONG).show();
+                            } else {
+                                RecsAdapter recsAdapter = new RecsAdapter(resultList, getActivity(), mUserToken);
+                                mRecyclerView.setAdapter(recsAdapter);
+                            }
+                        }
                     }
-                    mSwipeLayout.setRefreshing(false);
                     hideLoader();
+                    mSwipeLayout.setRefreshing(false);
                 } catch (IOException e) {
                     hideLoader();
-                    mSnackbarRecsError.show();
                     Log.e(TAG, e.getMessage(), e);
+                    mSnackbarRecsError.show();
                     mSwipeLayout.setRefreshing(false);
                 }
             }
@@ -126,20 +121,18 @@ public class RecsFragment extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 hideLoader();
+                Log.e(TAG, t.getMessage(), t);
                 mSnackbarRecsError.show();
                 mSwipeLayout.setRefreshing(false);
-                Log.e(TAG, t.getMessage(), t);
             }
         });
     }
 
     private void showLoader() {
         mDotLoader.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
     }
 
     private void hideLoader() {
         mDotLoader.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
     }
 }

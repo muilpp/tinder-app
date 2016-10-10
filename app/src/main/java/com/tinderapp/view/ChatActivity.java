@@ -99,13 +99,12 @@ public class ChatActivity extends AppCompatActivity {
                         MatchDTO matches = new Gson().fromJson(responseStr, MatchDTO.class);
 
                         if (matches.getMatchList() != null) {
-
                             for (Match match : matches.getMatchList()) {
-                                //Fetch only the messages of the current user
+                                //Fetch only the messages of the current match
                                 if (match.getId().contains(mUserID)) {
                                     for (Message message : match.getMessageList()) {
-                                        //Message is received after last check, so we add it to the list
-                                        if (new DateTime(message.getTimestamp()).isAfter(new DateTime(mLastActivityDate))) {
+                                        //Message is sent by our match and received after last check, so we add it to the list
+                                        if (message.getFrom().equalsIgnoreCase(mUserID) && new DateTime(message.getTimestamp()).isAfter(new DateTime(mLastActivityDate))) {
                                             BaseApplication.getEventBus().post(new Message(message.getTo(), message.getFrom(), message.getMessage(), DateTime.now().getMillis()));
                                         }
                                     }

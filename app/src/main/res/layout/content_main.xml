@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".view.HomeActivity">
-    <!--tools:showIn="@layout/activity_home">-->
 
     <com.bhargavms.dotloader.DotLoader
         android:id="@+id/dot_loader"
@@ -17,8 +16,7 @@
         android:visibility="visible"
         app:color_array="@array/dot_colors"
         app:dot_radius="4dp"
-        app:number_of_dots="3"
-        />
+        app:number_of_dots="3" />
 
     <RelativeLayout
         android:id="@+id/menu_layout"
@@ -38,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Change user"/>
+                android:text="@string/menu_new_user"/>
 
             <ImageView
                 android:id="@+id/add_person_iv"
@@ -63,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Recommendations"/>
+                android:text="@string/menu_recs"/>
 
             <ImageView
                 android:id="@+id/recs_iv"
@@ -88,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Matches"/>
+                android:text="@string/menu_matches"/>
 
             <ImageView
                 android:id="@+id/matches_iv"
@@ -97,7 +95,32 @@
                 android:layout_below="@+id/matches_tv"
                 android:layout_marginTop="20dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_supervisor_account_black_48dp"/>
+                android:src="@drawable/ic_chat_black_48dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/possible_matches_layout"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_below="@+id/matches_layout">
+
+            <TextView
+                android:id="@+id/possible_matches_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/menu_possible_matches"/>
+
+            <ImageView
+                android:id="@+id/possible_matches_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/possible_matches_tv"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_face_black_48dp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -114,7 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Change location"/>
+                android:text="@string/menu_change_location"/>
 
             <ImageView
                 android:id="@+id/change_location_iv"

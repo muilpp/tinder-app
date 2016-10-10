@@ -7,8 +7,9 @@
     <string name="try_again">TRY AGAIN</string>
     <string name="welcome">Welcome!</string>
 
-    <!--Image Activity-->
-    <string name="title_activity_image_gallery"></string>
+    <!--User Fragment-->
+    <string name="default_user">Default</string>
+    <string name="joan_user">Alternative</string>
 
     <!--Recommendations Fragment-->
     <string name="name">Name: </string>
@@ -28,10 +29,12 @@
     <string name="empty_message">Message is empty, type something first!</string>
 
     <!--Drawer Menu-->
+    <string name="menu_home">Home</string>
     <string name="menu_new_user">Change user</string>
     <string name="menu_recs">Recommendations</string>
     <string name="menu_matches">Matches</string>
-    <string name="change_location">Change location</string>
+    <string name="menu_change_location">Change location</string>
+    <string name="menu_possible_matches">Possible Matches</string>
     <string name="menu_exit">Exit</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
@@ -51,4 +54,7 @@
     <string name="delete_match_dialog_message">Are you sure you want to delete this match?</string>
     <string name="delete_match_error">Not possible to delete it this time, try again!</string>
     <string name="delete_match_ok">Match correctly deleted</string>
+
+    <!--Possible matches-->
+    <string name="error_get_possible_matches">Not possible to get the possible matches this time</string>
 </resources>

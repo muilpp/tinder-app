@@ -4,25 +4,20 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/joan_fragment_tv"
+        android:id="@+id/alternative_fragment_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:textSize="24sp"
-        android:text="Joan"
+        android:text="@string/joan_user"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp" />
 
     <TextView
-        android:id="@+id/marc_fragment_tv"
+        android:id="@+id/default_fragment_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:textSize="24sp"
-        android:layout_below="@+id/joan_fragment_tv"
-        android:text="Marc"
+        android:text="@string/default_user"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="44dp" />
 
