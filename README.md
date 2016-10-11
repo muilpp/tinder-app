@@ -1,6 +1,6 @@
 # Tinder Android app
 An Android app using the Tinder API, which offers some extra features:
-  - Know who liked you in advanced
+  - Know who liked you in advance
   - Change your position
   - Have multiple profiles at the same time
   - View all recommendations at once

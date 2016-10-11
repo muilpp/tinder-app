@@ -9,7 +9,7 @@
 
     <!--User Fragment-->
     <string name="default_user">Default</string>
-    <string name="joan_user">Alternative</string>
+    <string name="alternative_user">Alternative</string>
 
     <!--Recommendations Fragment-->
     <string name="name">Name: </string>

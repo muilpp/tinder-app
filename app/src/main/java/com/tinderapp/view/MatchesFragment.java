@@ -46,6 +46,9 @@ public class MatchesFragment extends Fragment {
     private String mUserToken;
     private Snackbar mSnackbarMatchError;
     private DotLoader mDotLoader;
+    private LinearLayoutManager mLayoutManager;
+    private int mScrollPosition = 0;
+    private MatchesRecyclerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +66,12 @@ public class MatchesFragment extends Fragment {
         getUserMatches(mUserToken);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScrollPosition = mLayoutManager.findFirstVisibleItemPosition();
+    }
+
     private void initViews(View rootView) {
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.matches_recycler_view);
@@ -78,8 +87,8 @@ public class MatchesFragment extends Fragment {
             }
         });
 
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(llm);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         mSnackbarMatchError = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), getString(R.string.error_get_matches), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.try_again), new View.OnClickListener() {
@@ -108,9 +117,19 @@ public class MatchesFragment extends Fragment {
                         MatchDTO matches = new Gson().fromJson(responseStr, MatchDTO.class);
 
                         Collections.sort(matches.getMatchList());
-                        MatchesRecyclerAdapter adapter = new MatchesRecyclerAdapter(matches.getMatchList());
+
+                        if (adapter == null)
+                            adapter = new MatchesRecyclerAdapter(matches.getMatchList());
+                        else {
+                            adapter.updateData(matches.getMatchList());
+                            adapter.notifyDataSetChanged();
+                        }
+
                         mRecyclerView.setAdapter(adapter);
                         mSwipeLayout.setRefreshing(false);
+
+                        if (mScrollPosition > 0 && mScrollPosition < mRecyclerView.getAdapter().getItemCount())
+                            mRecyclerView.scrollToPosition(mScrollPosition);
                     } else {
                         mSnackbarMatchError.show();
                         Log.i(TAG, response.errorBody().string());
@@ -156,6 +175,11 @@ public class MatchesFragment extends Fragment {
                 matchPhoto = (ImageView) itemView.findViewById(R.id.person_photo);
             }
         }
+
+        public void updateData(List<Match> matchList) {
+            this.matchList = matchList;
+        }
+
 
         @Override
         public MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

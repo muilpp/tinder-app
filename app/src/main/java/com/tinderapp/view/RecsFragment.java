@@ -1,7 +1,6 @@
 package com.tinderapp.view;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -12,29 +11,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bhargavms.dotloader.DotLoader;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.tinderapp.BuildConfig;
 import com.tinderapp.R;
 import com.tinderapp.model.TinderAPI;
 import com.tinderapp.model.TinderRetrofit;
-import com.tinderapp.model.api_data.Photo;
 import com.tinderapp.model.api_data.RecommendationsDTO;
-import com.tinderapp.model.api_data.Result;
-import com.tinderapp.model.api_data.UserProfileDTO;
 import com.tinderapp.presenter.RecsAdapter;
 
-import org.joda.time.DateTime;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -100,7 +89,7 @@ public class RecsFragment extends Fragment {
                         String responseStr = response.body().string();
                         if (responseStr.contains("recs timeout") || responseStr.contains("recs exhausted") || responseStr.contains("error")) {
                             Toast.makeText(getActivity(), "Something weird happened", Toast.LENGTH_LONG).show();
-                            getActivity().finish();
+                            ((HomeActivity)getActivity()).removeFragments();
                         } else {
                             RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
 

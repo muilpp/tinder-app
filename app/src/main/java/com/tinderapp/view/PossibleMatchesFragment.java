@@ -47,11 +47,10 @@ public class PossibleMatchesFragment extends Fragment {
         initViews(rootView);
         mUserToken = this.getArguments().getString(BuildConfig.USER_TOKEN);
         getPossibleMatches();
-
         return rootView;
     }
 
-    private void initViews(View rootView) {
+   private void initViews(View rootView) {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.possible_matches_recycler_view);
         GridLayoutManager mLayoutManager = new GridLayoutManager(rootView.getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -59,6 +58,7 @@ public class PossibleMatchesFragment extends Fragment {
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                resultList.clear();
                 getPossibleMatches();
             }
         });
@@ -87,7 +87,7 @@ public class PossibleMatchesFragment extends Fragment {
                     String responseStr = response.body().string();
                     if (responseStr.contains("recs timeout") || responseStr.contains("recs exhausted") || responseStr.contains("error")) {
                         Toast.makeText(getActivity(), "Something weird happened", Toast.LENGTH_LONG).show();
-                        getActivity().finish();
+                        ((HomeActivity)getActivity()).removeFragments();
                     } else {
                         RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
 

@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="@string/joan_user"
+        android:text="@string/alternative_user"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp" />
 
