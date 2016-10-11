@@ -111,6 +111,7 @@ public class UserProfileActivity extends AppCompatActivity {
         bioTv.setText(bioTv.getText() + " " + getIntent().getStringExtra(BuildConfig.BIO));
 
         final boolean hideLikeIcons = getIntent().getBooleanExtra(BuildConfig.HIDE_LIKE_ICONS, false);
+        final boolean isBlockedUser = getIntent().getBooleanExtra(BuildConfig.IS_BLOCKED_USER, false);
 
         final ImageView likeView = (ImageView) findViewById(R.id.like_image);
         final ImageView passView = (ImageView) findViewById(R.id.pass_image);
@@ -120,43 +121,47 @@ public class UserProfileActivity extends AppCompatActivity {
             likeView.setVisibility(View.GONE);
             superLikeView.setVisibility(View.GONE);
 
-            passView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(UserProfileActivity.this)
-                            .setTitle(R.string.delete_match_dialog_title)
-                            .setMessage(R.string.delete_match_dialog_message)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
+            if (isBlockedUser)
+                passView.setVisibility(View.GONE);
+            else {
+                passView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(UserProfileActivity.this)
+                                .setTitle(R.string.delete_match_dialog_title)
+                                .setMessage(R.string.delete_match_dialog_message)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                    TinderAPI tinderAPI = TinderRetrofit.getTokenInstance(getIntent().getStringExtra(BuildConfig.USER_TOKEN));
-                                    Call<ResponseBody> call = tinderAPI.deleteMatch(getIntent().getStringExtra(BuildConfig.MATCH_ID));
+                                        TinderAPI tinderAPI = TinderRetrofit.getTokenInstance(getIntent().getStringExtra(BuildConfig.USER_TOKEN));
+                                        Call<ResponseBody> call = tinderAPI.deleteMatch(getIntent().getStringExtra(BuildConfig.MATCH_ID));
 
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            Toast.makeText(getApplicationContext(), R.string.delete_match_ok, Toast.LENGTH_LONG).show();
-                                            Intent getMatchesIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
-                                            getMatchesIntent.putExtra(BuildConfig.SHOW_MATCHES, true);
-                                            finish();
-                                            startActivity(getMatchesIntent);
-                                        }
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                Toast.makeText(getApplicationContext(), R.string.delete_match_ok, Toast.LENGTH_LONG).show();
+                                                Intent getMatchesIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
+                                                getMatchesIntent.putExtra(BuildConfig.SHOW_MATCHES, true);
+                                                finish();
+                                                startActivity(getMatchesIntent);
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getApplicationContext(), R.string.delete_match_error, Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-            });
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(getApplicationContext(), R.string.delete_match_error, Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+            }
         } else {
             likeView.setOnClickListener(new View.OnClickListener() {
                 @Override

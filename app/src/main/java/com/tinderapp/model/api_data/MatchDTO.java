@@ -12,6 +12,7 @@ public class MatchDTO {
     @SerializedName("last_activity_date")
     private String lastActivity;
 
+
     public List<Match> getMatchList() {
         return matchList;
     }

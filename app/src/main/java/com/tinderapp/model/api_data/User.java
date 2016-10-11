@@ -6,6 +6,8 @@ import java.util.List;
 
 public class User {
     private String name;
+    @SerializedName("_id")
+    private String id;
     @SerializedName("photos")
     private List<Photo> photoList;
 
@@ -23,5 +25,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

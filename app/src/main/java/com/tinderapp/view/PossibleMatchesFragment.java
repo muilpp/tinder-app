@@ -50,7 +50,7 @@ public class PossibleMatchesFragment extends Fragment {
         return rootView;
     }
 
-   private void initViews(View rootView) {
+    private void initViews(View rootView) {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.possible_matches_recycler_view);
         GridLayoutManager mLayoutManager = new GridLayoutManager(rootView.getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);

@@ -35,6 +35,7 @@
     <string name="menu_matches">Matches</string>
     <string name="menu_change_location">Change location</string>
     <string name="menu_possible_matches">Possible Matches</string>
+    <string name="menu_blocks">Blocks</string>
     <string name="menu_exit">Exit</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
@@ -57,4 +58,7 @@
 
     <!--Possible matches-->
     <string name="error_get_possible_matches">Not possible to get the possible matches this time</string>
+
+    <!--Blocks-->
+    <string name="error_get_blocks">Not possible to get the blocked users this time</string>
 </resources>

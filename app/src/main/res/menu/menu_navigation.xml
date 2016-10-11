@@ -32,6 +32,11 @@
             android:icon="@drawable/ic_face_black_48dp"/>
 
         <item
+            android:id="@+id/blocks"
+            android:title="@string/menu_blocks"
+            android:icon="@drawable/ic_visibility_off_black_48dp"/>
+
+        <item
             android:id="@+id/exit"
             android:title="@string/menu_exit"
             android:icon="@drawable/ic_exit_to_app_black_48dp"/>

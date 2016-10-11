@@ -124,6 +124,19 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().replace(R.id.main_content, possibleMatchesFragment, getString(R.string.menu_possible_matches)).commit();
             }
         });
+
+        RelativeLayout blocksLayout = (RelativeLayout)findViewById(R.id.blocks_layout);
+        blocksLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideMenu();
+                args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                args.putString(BuildConfig.USER_ID, mTinderUser.getUser().getId());
+                BlocksFragment blocksFragment = new BlocksFragment();
+                blocksFragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.main_content, blocksFragment, getString(R.string.menu_blocks)).commit();
+            }
+        });
     }
 
     public void initNavigationDrawer() {
@@ -195,6 +208,16 @@ public class HomeActivity extends AppCompatActivity {
                         Intent mapsIntent = new Intent(HomeActivity.this, MapsActivity.class);
                         mapsIntent.putExtra(BuildConfig.USER_TOKEN, mTinderUser.getToken());
                         startActivityForResult(mapsIntent, BuildConfig.REQUEST_CODE_CHANGE_LOCATION);
+                        break;
+
+                    case R.id.blocks:
+                        args.putString(BuildConfig.USER_TOKEN, mTinderUser.getToken());
+                        args.putString(BuildConfig.USER_ID, mTinderUser.getUser().getId());
+                        BlocksFragment blocksFragment = new BlocksFragment();
+                        blocksFragment.setArguments(args);
+                        fragmentManager.beginTransaction().replace(R.id.main_content, blocksFragment, getString(R.string.menu_blocks)).commit();
+
+                        mDrawerLayout.closeDrawers();
                         break;
 
                     case R.id.exit:
@@ -388,6 +411,10 @@ public class HomeActivity extends AppCompatActivity {
         Fragment possibleMatchesFragment = mFragmentManager.findFragmentByTag(getString(R.string.menu_possible_matches));
         if(possibleMatchesFragment != null)
             mFragmentManager.beginTransaction().remove(possibleMatchesFragment).commit();
+
+        Fragment blocksFragment = mFragmentManager.findFragmentByTag(getString(R.string.menu_blocks));
+        if(blocksFragment != null)
+            mFragmentManager.beginTransaction().remove(blocksFragment).commit();
 
         menuLayout.setVisibility(View.VISIBLE);
     }
