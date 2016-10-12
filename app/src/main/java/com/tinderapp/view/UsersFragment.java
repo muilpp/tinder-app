@@ -92,6 +92,7 @@ public class UsersFragment extends Fragment {
 
                         //Update the token in the home activity to make sure the proper user is used
                         ((HomeActivity)getActivity()).getTinderUser().setToken(mTinderUser.getToken());
+                        ((HomeActivity)getActivity()).getTinderUser().setUser(mTinderUser.getUser());
                         ((HomeActivity)getActivity()).removeFragments();
                     } else {
                         Log.i(TAG, response.errorBody().string());
