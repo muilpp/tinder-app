@@ -267,9 +267,9 @@ public class HomeActivity extends AppCompatActivity {
                                 String responseStr = response.body().string();
 
                                 if (responseStr.contains("error"))
-                                    Toast.makeText(HomeActivity.this, "Wait a little longer to perform another location change", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(HomeActivity.this, R.string.wait_location_change, Toast.LENGTH_LONG).show();
                                 else
-                                    Toast.makeText(HomeActivity.this, "Location changed successfully, go look for new matches here!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(HomeActivity.this, R.string.location_changed, Toast.LENGTH_LONG).show();
                             } else {
                                 showLoginErrorSnackbar(getString(R.string.change_location_error));
                                 Log.i(TAG, response.errorBody().string());

@@ -86,7 +86,7 @@ public class PossibleMatchesFragment extends Fragment {
                 try {
                     String responseStr = response.body().string();
                     if (responseStr.contains("recs timeout") || responseStr.contains("recs exhausted") || responseStr.contains("error")) {
-                        Toast.makeText(getActivity(), "Something weird happened", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), R.string.error_sth_weird, Toast.LENGTH_LONG).show();
                         ((HomeActivity)getActivity()).removeFragments();
                     } else {
                         RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
@@ -100,8 +100,7 @@ public class PossibleMatchesFragment extends Fragment {
                             resultList.retainAll(recs.getResult());
 
                             if(resultList.isEmpty()) {
-                                Log.i(TAG, "No possible matches this time, try again later");
-                                Toast.makeText(getActivity(), "No possible matches this time, try again later", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), R.string.no_matches_this_time, Toast.LENGTH_LONG).show();
                             } else {
                                 RecsAdapter recsAdapter = new RecsAdapter(resultList, getActivity(), mUserToken);
                                 mRecyclerView.setAdapter(recsAdapter);

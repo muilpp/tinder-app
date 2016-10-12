@@ -25,6 +25,8 @@
     <string name="like_everyone_dialog_message">Are you sure you want to send a like to everyone?</string>
     <string name="like_everyone_error">Not possible to send a like this time, try again!</string>
     <string name="like_everyone_ok">Likes correctly sent</string>
+    <string name="no_recs_this_time">No recommendations this time</string>
+    <string name="new_matches">&#160;new matches</string>
 
     <!--Matches Fragment-->
     <string name="error_get_matches">Not possible to get the matches this time</string>
@@ -53,16 +55,25 @@
     <string name="change_location_dialog_title">Change location</string>
     <string name="change_location_dialog_message">Are you sure you want to edit your location?</string>
     <string name="change_location_error">Not posible to change the location this time, try again!</string>
+    <string name="wait_location_change">Wait a little longer to perform another location change</string>
+    <string name="location_changed">Location changed successfully, go look for new matches here!</string>
 
     <!--User Profile Activity-->
     <string name="delete_match_dialog_title">Delete match</string>
     <string name="delete_match_dialog_message">Are you sure you want to delete this match?</string>
     <string name="delete_match_error">Not possible to delete it this time, try again!</string>
     <string name="delete_match_ok">Match correctly deleted</string>
+    <string name="new_match">This is a new match!</string>
+    <string name="not_a_match">Not a match :(</string>
+    <string name="error_superlike_not_performed">Could not perform a superlike this time, try again later</string>
+    <string name="superlike_exceeded">Superlike limit exceeded</string>
 
     <!--Possible matches-->
     <string name="error_get_possible_matches">Not possible to get the possible matches this time</string>
+    <string name="error_sth_weird">Something weird happened</string>
+    <string name="no_matches_this_time">No possible matches this time, try again later</string>
 
     <!--Blocks-->
     <string name="error_get_blocks">Not possible to get the blocked users this time</string>
+    <string name="profile_deleted">This profile was deleted!</string>
 </resources>

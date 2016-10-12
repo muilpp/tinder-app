@@ -100,7 +100,7 @@ public class RecsFragment extends Fragment {
                     if (response.isSuccessful() && response.body() != null) {
                         String responseStr = response.body().string();
                         if (responseStr.contains("recs timeout") || responseStr.contains("recs exhausted") || responseStr.contains("error")) {
-                            Toast.makeText(getActivity(), "Something weird happened", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), R.string.error_sth_weird, Toast.LENGTH_LONG).show();
                             ((HomeActivity)getActivity()).removeFragments();
                         } else {
                             final RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
@@ -129,7 +129,7 @@ public class RecsFragment extends Fragment {
                                                 .show();
                                     }
                                 });
-                            } else Toast.makeText(getActivity(), "No recommendations this time", Toast.LENGTH_LONG).show();
+                            } else Toast.makeText(getActivity(), R.string.no_recs_this_time, Toast.LENGTH_LONG).show();
                         }
                     } else {
                         mSnackbarRecsError.show();
@@ -197,8 +197,7 @@ public class RecsFragment extends Fragment {
 
         ((HomeActivity) getActivity()).removeFragments();
         hideLoader();
-        Log.i(TAG, numLikes + " new matches");
-        Toast.makeText(getActivity(), numLikes + " new matches", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), numLikes + R.string.new_matches, Toast.LENGTH_LONG).show();
     }
 
     private void showLoader() {

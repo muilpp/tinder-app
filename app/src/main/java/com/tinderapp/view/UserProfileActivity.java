@@ -24,7 +24,6 @@ import com.tinderapp.BuildConfig;
 import com.tinderapp.R;
 import com.tinderapp.model.TinderAPI;
 import com.tinderapp.model.TinderRetrofit;
-import com.tinderapp.model.api_data.LikeDTO;
 import com.tinderapp.model.api_data.SuperlikeDTO;
 
 import org.joda.time.DateTime;
@@ -173,15 +172,11 @@ public class UserProfileActivity extends AppCompatActivity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             try {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    String responseStr = response.body().string();
-
-                                    if (responseStr.toLowerCase().contains("_id")) {
-                                        LikeDTO likeDTO = new Gson().fromJson(responseStr, LikeDTO.class);
-                                        Log.i(TAG, "Superlike ? " + likeDTO.getMatch().isSuperLike());
-                                        Toast.makeText(getApplicationContext(), "This is a new match!", Toast.LENGTH_LONG).show();
+                                    if (response.body().string().toLowerCase().contains("_id")) {
+                                        Toast.makeText(getApplicationContext(), R.string.new_match, Toast.LENGTH_LONG).show();
                                     }
 
-                                    Toast.makeText(getApplicationContext(), "Not a match :(", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), R.string.not_a_match, Toast.LENGTH_LONG).show();
                                 } else {
                                     Log.i(TAG, response.errorBody().string());
                                 }
@@ -237,23 +232,21 @@ public class UserProfileActivity extends AppCompatActivity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                             try {
-                                Log.i(TAG, "Response -> " + response.body());
-
                                 //Sometimes the superlike request returns null for no reason
                                 if (response.body() == null) {
-                                    Toast.makeText(UserProfileActivity.this, "Could not perform a superlike this time, try again later", Toast.LENGTH_SHORT).show();
-                                    Log.i(TAG, "Could not perform a superlike this time, try again later");
+                                    Toast.makeText(UserProfileActivity.this, R.string.error_superlike_not_performed, Toast.LENGTH_SHORT).show();
                                 } else {
                                     String responseStr = response.body().string();
 
                                     SuperlikeDTO superlikeDTO = new Gson().fromJson(responseStr, SuperlikeDTO.class);
 
                                     if (responseStr.toLowerCase().contains("limit_exceeded")) {
-                                        Toast.makeText(UserProfileActivity.this, "Superlike limit exceeded", Toast.LENGTH_SHORT).show();
-                                        Log.i(TAG, "Superlike limit exceeded");
+                                        Toast.makeText(UserProfileActivity.this, R.string.superlike_exceeded, Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(UserProfileActivity.this, "Super match ? " + superlikeDTO.getMatch(), Toast.LENGTH_SHORT).show();
-                                        Log.i(TAG, "Super match ? " + superlikeDTO.getMatch());
+                                        if (superlikeDTO.getMatch())
+                                            Toast.makeText(UserProfileActivity.this, R.string.new_match, Toast.LENGTH_SHORT).show();
+                                        else
+                                            Toast.makeText(UserProfileActivity.this, R.string.not_a_match, Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                 }

@@ -81,7 +81,7 @@ public class BlocksRecyclerAdapter extends RecyclerView.Adapter<BlocksRecyclerAd
                             if (response.isSuccessful() && response.body() != null) {
                                 String responseStr = response.body().string();
                                 if (responseStr.contains("recs timeout") || responseStr.contains("recs exhausted") || responseStr.contains("error")) {
-                                    Toast.makeText(mActivity, "Something weird happened", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(mActivity, R.string.error_sth_weird, Toast.LENGTH_LONG).show();
                                     ((HomeActivity)mActivity).removeFragments();
                                 } else {
                                     UserProfileDTO userProfile = new Gson().fromJson(responseStr, UserProfileDTO.class);
@@ -117,6 +117,7 @@ public class BlocksRecyclerAdapter extends RecyclerView.Adapter<BlocksRecyclerAd
                                 }
                             } else {
                                 Log.i(TAG, response.errorBody().string());
+                                Toast.makeText(mActivity, R.string.profile_deleted, Toast.LENGTH_LONG).show();
                             }
                         } catch (IOException e) {
                             Log.e(TAG, e.getMessage(), e);
