@@ -16,7 +16,7 @@
         android:visibility="visible"
         app:color_array="@array/dot_colors"
         app:dot_radius="4dp"
-        app:number_of_dots="3" />
+        app:number_of_dots="4" />
 
     <RelativeLayout
         android:id="@+id/menu_layout"

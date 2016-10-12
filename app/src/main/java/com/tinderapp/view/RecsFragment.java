@@ -1,10 +1,13 @@
 package com.tinderapp.view;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,9 +24,14 @@ import com.tinderapp.R;
 import com.tinderapp.model.TinderAPI;
 import com.tinderapp.model.TinderRetrofit;
 import com.tinderapp.model.api_data.RecommendationsDTO;
+import com.tinderapp.model.api_data.Result;
 import com.tinderapp.presenter.RecsAdapter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -38,6 +46,8 @@ public class RecsFragment extends Fragment {
     private SwipeRefreshLayout mSwipeLayout;
     private Snackbar mSnackbarRecsError;
     private DotLoader mDotLoader;
+    private FloatingActionButton mFab;
+    private int numLikes = 0, loopCounter = 0;
 
     @Nullable
     @Override
@@ -76,6 +86,8 @@ public class RecsFragment extends Fragment {
                     }
                 });
 
+        mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+
         getUserRecommendations();
     }
 
@@ -91,11 +103,32 @@ public class RecsFragment extends Fragment {
                             Toast.makeText(getActivity(), "Something weird happened", Toast.LENGTH_LONG).show();
                             ((HomeActivity)getActivity()).removeFragments();
                         } else {
-                            RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
+                            final RecommendationsDTO recs = new Gson().fromJson(responseStr, RecommendationsDTO.class);
 
                             if (recs != null && recs.getResult() != null & recs.getResult().size() > 0) {
                                 RecsAdapter recsAdapter = new RecsAdapter(recs.getResult(), getActivity(), mUserToken);
                                 mRecyclerView.setAdapter(recsAdapter);
+
+                                mFab.setVisibility(View.VISIBLE);
+                                mFab.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        new AlertDialog.Builder(getActivity())
+                                                .setTitle(R.string.like_everyone_dialog_title)
+                                                .setMessage(R.string.like_everyone_dialog_message)
+                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        sendLikeToEveryone(recs.getResult());
+                                                    }
+                                                })
+                                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                    }
+                                });
                             } else Toast.makeText(getActivity(), "No recommendations this time", Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -120,6 +153,52 @@ public class RecsFragment extends Fragment {
                 Log.e(TAG, t.getMessage(), t);
             }
         });
+    }
+
+    private void sendLikeToEveryone(List<Result> recsList) {
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(recsList.size() / 3);
+
+        final TinderAPI tinderAPI = TinderRetrofit.getTokenInstance(mUserToken);
+        for (final Result result : recsList) {
+
+            Runnable likeEveryoneRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Call<ResponseBody> call = tinderAPI.sendLike(result.getId());
+
+                        //execute them in the same thread because we're already out of the main one
+                        Response<ResponseBody>  response = call.execute();
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            if (response.body().string().toLowerCase().contains("_id"))
+                                numLikes++;
+                        } else {
+                            Log.i(TAG, response.errorBody().string());
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+                }
+            };
+
+            loopCounter++;
+            //Scheduled 200ms after the last one bc sending all of them at the same time does not work (just got the response of half of them), not sure if it's Retrofit or Tinder API's fault
+            final int loopTime = 200;
+            scheduledExecutorService.schedule(likeEveryoneRunnable, loopCounter * loopTime, TimeUnit.MILLISECONDS);
+        }
+
+        try {
+            scheduledExecutorService.shutdown();
+            scheduledExecutorService.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        ((HomeActivity) getActivity()).removeFragments();
+        hideLoader();
+        Log.i(TAG, numLikes + " new matches");
+        Toast.makeText(getActivity(), numLikes + " new matches", Toast.LENGTH_LONG).show();
     }
 
     private void showLoader() {

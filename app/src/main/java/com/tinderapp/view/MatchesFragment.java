@@ -103,8 +103,7 @@ public class MatchesFragment extends Fragment {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     if (response.isSuccessful() && response.body() != null) {
-                        String responseStr = response.body().string();
-                        MatchDTO matches = new Gson().fromJson(responseStr, MatchDTO.class);
+                        MatchDTO matches = new Gson().fromJson(response.body().string(), MatchDTO.class);
 
                         Collections.sort(matches.getMatchList());
 

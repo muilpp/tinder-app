@@ -1,7 +1,9 @@
 package com.tinderapp.model;
 
 import android.util.Log;
+
 import com.tinderapp.BuildConfig;
+
 import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -17,6 +19,7 @@ public class TinderRetrofit {
 
     public static TinderAPI getRawInstance() {
         if (tinderRawAPI == null) {
+
             OkHttpClient okClientLoggerInterceptor = new OkHttpClient.Builder()
                     .addInterceptor(
                             new Interceptor() {
@@ -34,6 +37,7 @@ public class TinderRetrofit {
                             })
                     .build();
 
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BuildConfig.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -50,6 +54,7 @@ public class TinderRetrofit {
     public static TinderAPI getTokenInstance(String token) {
         userToken = token;
         if (tinderTokenAPI == null) {
+
             OkHttpClient okClientLoggerInterceptor = new OkHttpClient.Builder()
                     .addInterceptor(
                             new Interceptor() {

@@ -2,6 +2,7 @@ package com.tinderapp.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class RecsAdapter extends RecyclerView.Adapter<RecsAdapter.RecsViewHolder
     }
 
     public class RecsViewHolder extends RecyclerView.ViewHolder {
-
+        CardView recsCardView;
         TextView userName;
         TextView userBirthDate;
         TextView userDistance;
@@ -55,6 +56,7 @@ public class RecsAdapter extends RecyclerView.Adapter<RecsAdapter.RecsViewHolder
 
         RecsViewHolder(View itemView) {
             super(itemView);
+            recsCardView = (CardView) itemView.findViewById(R.id.recs_card_view);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             userBirthDate = (TextView) itemView.findViewById(R.id.user_birth_date);
             userDistance = (TextView) itemView.findViewById(R.id.user_distance);
@@ -83,7 +85,7 @@ public class RecsAdapter extends RecyclerView.Adapter<RecsAdapter.RecsViewHolder
                 .load(mRecsList.get(position).getPhotos().get(0).getProcessedFiles().get(0).getUrl())
                 .into(holder.recsPhoto);
 
-        holder.recsPhoto.setOnClickListener(new View.OnClickListener() {
+        holder.recsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 Call<ResponseBody> call = tinderAPI.getUserProfile(mRecsList.get(position).getId());

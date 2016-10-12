@@ -174,15 +174,14 @@ public class UserProfileActivity extends AppCompatActivity {
                             try {
                                 if (response.isSuccessful() && response.body() != null) {
                                     String responseStr = response.body().string();
-                                    boolean isMatch = false;
 
                                     if (responseStr.toLowerCase().contains("_id")) {
                                         LikeDTO likeDTO = new Gson().fromJson(responseStr, LikeDTO.class);
                                         Log.i(TAG, "Superlike ? " + likeDTO.getMatch().isSuperLike());
-                                        isMatch = true;
+                                        Toast.makeText(getApplicationContext(), "This is a new match!", Toast.LENGTH_LONG).show();
                                     }
 
-                                    Toast.makeText(getApplicationContext(), "Is match: " + isMatch, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Not a match :(", Toast.LENGTH_LONG).show();
                                 } else {
                                     Log.i(TAG, response.errorBody().string());
                                 }

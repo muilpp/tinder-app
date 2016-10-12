@@ -3,6 +3,7 @@ package com.tinderapp.view;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class BlocksFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private DotLoader mDotLoader;
     private Snackbar mSnackbarMatchError;
+    private SwipeRefreshLayout mSwipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +69,14 @@ public class BlocksFragment extends Fragment {
                         getBlocks();
                     }
                 });
+
+        mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getBlocks();
+            }
+        });
     }
 
     private void getBlocks() {
@@ -127,5 +137,6 @@ public class BlocksFragment extends Fragment {
     private void hideLoader() {
         mDotLoader.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
+        mSwipeLayout.setRefreshing(false);
     }
 }
