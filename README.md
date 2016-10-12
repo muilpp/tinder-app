@@ -3,7 +3,7 @@ An Android app using the Tinder API, which offers some extra features:
   - Know who liked you in advance
   - Change your position
   - Have multiple profiles at the same time
-  - View all recommendations at once
+  - Send a like to all the recommendations with just a click
   - Know the last time your matches logged in
   - View all the users who blocked you
 
