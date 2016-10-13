@@ -4,6 +4,7 @@
     <!--Home Activity-->
     <string name="title_activity_home">Welcome!</string>
     <string name="error_login">Not possible to login this time</string>
+    <string name="error_token_login">Login failed, facebook token has expired</string>
     <string name="try_again">TRY AGAIN</string>
     <string name="welcome">Welcome!</string>
 

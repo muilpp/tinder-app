@@ -174,9 +174,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 if (response.isSuccessful() && response.body() != null) {
                                     if (response.body().string().toLowerCase().contains("_id")) {
                                         Toast.makeText(getApplicationContext(), R.string.new_match, Toast.LENGTH_LONG).show();
-                                    }
-
-                                    Toast.makeText(getApplicationContext(), R.string.not_a_match, Toast.LENGTH_LONG).show();
+                                    } else Toast.makeText(getApplicationContext(), R.string.not_a_match, Toast.LENGTH_LONG).show();
                                 } else {
                                     Log.i(TAG, response.errorBody().string());
                                 }

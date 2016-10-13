@@ -1,20 +1,13 @@
 package com.tinderapp.view;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,29 +16,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
 import com.tinderapp.BuildConfig;
 import com.tinderapp.R;
-import com.tinderapp.model.TinderAPI;
-import com.tinderapp.model.TinderRetrofit;
-import com.tinderapp.model.api_data.LikeDTO;
-import com.tinderapp.model.api_data.LocationDTO;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private final static String TAG = MapsActivity.class.getName();
-    private Location mLocation;
     private Marker mMarker;
+    private final double BCN_LAT = 41.3873106, BCN_LON = 2.1598319;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,64 +37,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        mLocation = getLocation();
-    }
-
-    public Location getLocation() {
-        Location location = null;
-        try {
-            LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-
-            // getting GPS status
-            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            // getting network status
-            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-            if (!isGPSEnabled && !isNetworkEnabled) {
-                Log.i(TAG, "No network provider enabled");
-            } else {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                }
-
-                double latitude = 0, longitude = 0;
-                if (isNetworkEnabled) {
-                    Log.i(TAG, "Network Enabled");
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    }
-                }
-                // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
-                    if (location == null) {
-                        Log.i(TAG, "GPS Enabled");
-
-                        if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-
-        return location;
     }
 
     /**
@@ -128,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         final GoogleMap gMap = googleMap;
 
-        updateMapLocation(gMap, mLocation.getLatitude(), mLocation.getLongitude());
+        updateMapLocation(gMap, BCN_LAT, BCN_LON);
 
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -186,6 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions markerOptions = new MarkerOptions().position(location).title(address);
         mMarker = gMap.addMarker(markerOptions);
         gMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-        gMap.animateCamera(CameraUpdateFactory.zoomTo(16.0f));
+        gMap.animateCamera(CameraUpdateFactory.zoomTo(8.0f));
     }
 }

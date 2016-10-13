@@ -31,11 +31,13 @@ import com.tinderapp.model.api_data.LocationDTO;
 import com.tinderapp.model.api_data.TinderUser;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HTTP;
 
 public class HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -339,8 +341,13 @@ public class HomeActivity extends AppCompatActivity {
                             hideMenu();
                         }
                     } else {
-                        showLoginErrorSnackbar(getString(R.string.error_login));
-                        Log.i(TAG, response.errorBody().string());
+                        if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                            showLoginErrorSnackbar(getString(R.string.error_token_login));
+                            Log.i(TAG, response.errorBody().string());
+                        } else {
+                            showLoginErrorSnackbar(getString(R.string.error_login));
+                            Log.i(TAG, response.errorBody().string());
+                        }
                     }
 
                     hideLoader();
