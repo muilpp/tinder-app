@@ -22,7 +22,7 @@
     <string name="lastConn">Last connection: </string>
     <string name="bio">Bio: </string>
     <string name="error_get_recs">Not possible to get the recommendations this time</string>
-    <string name="like_everyone_dialog_title">Live everyone</string>
+    <string name="like_everyone_dialog_title">Like everyone</string>
     <string name="like_everyone_dialog_message">Are you sure you want to send a like to everyone?</string>
     <string name="like_everyone_error">Not possible to send a like this time, try again!</string>
     <string name="like_everyone_ok">Likes correctly sent</string>

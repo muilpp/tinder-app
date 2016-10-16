@@ -197,7 +197,7 @@ public class RecsFragment extends Fragment {
 
         ((HomeActivity) getActivity()).removeFragments();
         hideLoader();
-        Toast.makeText(getActivity(), numLikes + R.string.new_matches, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), Integer.toString(numLikes) + getString(R.string.new_matches), Toast.LENGTH_LONG).show();
     }
 
     private void showLoader() {
