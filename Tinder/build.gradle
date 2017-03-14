@@ -1,0 +1,133 @@
+plugins {
+    id "org.sonarqube" version "2.2"
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    defaultConfig {
+        applicationId "com.tinderapp"
+        minSdkVersion 17
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        // Enabling multidex support.
+        multiDexEnabled true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "BASE_URL", "\"https://api.gotinder.com/\""
+            buildConfigField "String", "USER_NAME", "\"USER_NAME\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "BIRTH_DATE", "\"BIRTH_DATE\""
+            buildConfigField "String", "DISTANCE", "\"DISTANCE\""
+            buildConfigField "String", "IGRAM", "\"IGRAM\""
+            buildConfigField "String", "JOB", "\"JOB\""
+            buildConfigField "String", "SCHOOL", "\"SCHOOL\""
+            buildConfigField "String", "BIO", "\"BIO\""
+            buildConfigField "String", "USER_TOKEN", "\"USER_TOKEN\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "IMAGES_ARRAY", "\"IMAGES_ARRAY\""
+            buildConfigField "String", "LAST_CONNECTION", "\"LAST_CONNECTION\""
+            buildConfigField "String", "IGRAM_PACKAGE", "\"com.instagram.android\""
+            buildConfigField "String", "IGRAM_BASE_URL", "\"http://instagram.com/\""
+            buildConfigField "String", "MESSAGE_LIST", "\"MESSAGE_LIST\""
+            buildConfigField "String", "USER_IMAGE", "\"USER_IMAGE\""
+            buildConfigField "String", "MATCH_ID", "\"MATCH_ID\""
+            buildConfigField "String", "HIDE_LIKE_ICONS", "\"HIDE_LIKE_ICONS\""
+            buildConfigField "String", "DEFAULT_TOKEN", "\"\""
+            buildConfigField "String", "LAT", "\"LAT\""
+            buildConfigField "String", "LON", "\"LON\""
+            buildConfigField "String", "SHOW_MATCHES", "\"SHOW_MATCHES\""
+            buildConfigField "Integer", "REQUEST_CODE_CHANGE_LOCATION", "1"
+            buildConfigField "String", "IS_BLOCKED_USER", "\"IS_BLOCKED_USER\""
+            buildConfigField "String", "MATCH_LATITUDE", "\"MATCH_LATITUDE\""
+            buildConfigField "String", "MATCH_LONGITUDE", "\"MATCH_LONGITUDE\""
+            buildConfigField "String", "USER_PROFILE", "\"USER_PROFILE\""
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", "\"https://api.gotinder.com/\""
+            buildConfigField "String", "USER_NAME", "\"USER_NAME\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "BIRTH_DATE", "\"BIRTH_DATE\""
+            buildConfigField "String", "DISTANCE", "\"DISTANCE\""
+            buildConfigField "String", "IGRAM", "\"IGRAM\""
+            buildConfigField "String", "JOB", "\"JOB\""
+            buildConfigField "String", "SCHOOL", "\"SCHOOL\""
+            buildConfigField "String", "BIO", "\"BIO\""
+            buildConfigField "String", "USER_TOKEN", "\"USER_TOKEN\""
+            buildConfigField "String", "USER_ID", "\"USER_ID\""
+            buildConfigField "String", "IMAGES_ARRAY", "\"IMAGES_ARRAY\""
+            buildConfigField "String", "LAST_CONNECTION", "\"LAST_CONNECTION\""
+            buildConfigField "String", "IGRAM_PACKAGE", "\"com.instagram.android\""
+            buildConfigField "String", "IGRAM_BASE_URL", "\"http://instagram.com/\""
+            buildConfigField "String", "MESSAGE_LIST", "\"MESSAGE_LIST\""
+            buildConfigField "String", "USER_IMAGE", "\"USER_IMAGE\""
+            buildConfigField "String", "MATCH_ID", "\"MATCH_ID\""
+            buildConfigField "String", "HIDE_LIKE_ICONS", "\"HIDE_LIKE_ICONS\""
+            buildConfigField "String", "DEFAULT_TOKEN", "\"\""
+            buildConfigField "String", "LAT", "\"LAT\""
+            buildConfigField "String", "LON", "\"LON\""
+            buildConfigField "String", "SHOW_MATCHES", "\"SHOW_MATCHES\""
+            buildConfigField "Integer", "REQUEST_CODE_CHANGE_LOCATION", "1"
+            buildConfigField "String", "IS_BLOCKED_USER", "\"IS_BLOCKED_USER\""
+            buildConfigField "String", "MATCH_LATITUDE", "\"MATCH_LATITUDE\""
+            buildConfigField "String", "MATCH_LONGITUDE", "\"MATCH_LONGITUDE\""
+            buildConfigField "String", "USER_PROFILE", "\"USER_PROFILE\""
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    def espressoVersion = '2.2.2'
+    def testRunnerVersion = '0.5'
+
+    androidTestCompile "com.android.support.test:runner:${testRunnerVersion}"
+    androidTestCompile "com.android.support.test:rules:${testRunnerVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-contrib:${espressoVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
+
+    configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
+        androidTestCompileDependency.exclude group: 'com.android.support'
+    }
+
+    def androidVersion = '25.2.0'
+    compile 'com.android.support:appcompat-v7:' + androidVersion
+    compile 'com.android.support:design:' + androidVersion
+    compile 'com.android.support:support-v4:' + androidVersion
+    compile 'com.android.support:cardview-v7:' + androidVersion
+    compile 'com.android.support:recyclerview-v7:' + androidVersion
+
+    def playServicesVersion = '10.2.0'
+    compile 'com.google.android.gms:play-services:' + playServicesVersion
+    compile 'com.google.android.gms:play-services-location:' + playServicesVersion
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'joda-time:joda-time:2.8.1'
+    compile 'com.github.bhargavms:DotLoader:1.0.0'
+    compile 'com.squareup:otto:1.3.8'
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
+    compile 'com.android.support:support-v4:25.2.0'
+}
